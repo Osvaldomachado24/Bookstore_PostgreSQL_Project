@@ -14,7 +14,7 @@ Inclui tabelas de **livros, clientes e pedidos**, além de consultas SQL para an
 | Book_ID         | SERIAL (PK)     | ID único do livro        |
 | Title           | VARCHAR(100)    | Título do livro          |
 | Author          | VARCHAR(100)    | Autor do livro           |
-| Genre           | VARCHAR(50)     | Gênero literário         |
+| Genre           | VARCHAR(25)     | Gênero literário         |
 | Published_Year  | INT             | Ano de publicação        |
 | Price           | NUMERIC(10,2)   | Preço do livro           |
 | Stock           | INT             | Quantidade em estoque    |
