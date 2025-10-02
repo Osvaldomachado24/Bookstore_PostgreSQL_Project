@@ -119,13 +119,14 @@ Importar os CSVs para popular as tabelas.
 
 Rodar as consultas para análise.
 
-📌 Tecnologias Utilizadas
-PostgreSQL
-
-SQL
-
-GitHub (para versionamento e portfólio)
-
+📌 **Tecnologias Utilizadas**  
+- PostgreSQL  
+- SQL  
+- Git (controle de versão)  
+- GitHub (versionamento remoto e portfólio)  
+- PgAdmin (administração e testes)  
+- CSV (importação de dados)  
+- Markdown (documentação no README)  
 👤 Autor
 Projeto desenvolvido por Osvaldo Machado 🚀
 Se gostou, deixe uma ⭐ no repositório!
