@@ -1,0 +1,149 @@
+-- Create Tables
+DROP TABLE IF EXISTS Books;
+CREATE TABLE Books (
+    Book_ID SERIAL PRIMARY KEY,
+    Title VARCHAR(100),
+    Author VARCHAR(100),
+    Genre VARCHAR(50),
+    Published_Year INT,
+    Price NUMERIC(10, 2),
+    Stock INT
+);
+
+DROP TABLE IF EXISTS customers;
+CREATE TABLE Customers (
+    Customer_ID SERIAL PRIMARY KEY,
+    Name VARCHAR(100),
+    Email VARCHAR(100),
+    Phone VARCHAR(15),
+    City VARCHAR(50),
+    Country VARCHAR(150)
+);
+DROP TABLE IF EXISTS orders;
+CREATE TABLE Orders (
+    Order_ID SERIAL PRIMARY KEY,
+    Customer_ID INT REFERENCES Customers(Customer_ID),
+    Book_ID INT REFERENCES Books(Book_ID),
+    Order_Date DATE,
+    Quantity INT,
+    Total_Amount NUMERIC(10, 2)
+);
+
+SELECT * FROM Books;
+SELECT * FROM Customers;
+SELECT * FROM Orders;
+
+--Import Books
+COPY Books(Book_ID, Title, Author, Genre, Published_Year, Price, Stock)
+FROM 'C:/dados/Books.csv'
+DELIMITER ',' CSV HEADER;
+
+-- Importar Customers
+COPY Customers(Customer_ID, Name, Email, Phone, City, Country)
+FROM 'C:\dados/Customers.csv'
+DELIMITER ',' CSV HEADER;
+
+-- Importar Orders
+COPY Orders(Order_ID, Customer_ID, Book_ID, Order_Date, Quantity, Total_Amount)
+FROM 'C:\dados/Orders.csv'
+DELIMITER ',' CSV HEADER;
+
+-- 1.Recuperar todos livros do tipo Fiction (ficção)
+select *from Books
+where genre='Fiction';
+
+-- 2.Encontrar livros publicados após de 1950
+select*from Books
+where published_year>1950;
+
+--3.listar todos os clientes de canada
+select*from Customers
+where country='Canada';
+
+--4. Mostrar pedidos realizados em novembro
+select*from Orders
+where order_date between '2023-1-11' and '2023-11-30';
+
+--5 Total de estoque de livros disponiveis
+select
+	sum(stock)as estoque_total
+from Books
+
+--6. Recuperar todos pedidos com valor total acima de $20
+select*from Orders
+where total_amount>20;
+
+--7. Encontrar os detalhes do livro mas caro
+select*from Books
+ order by price desc
+ limit 1
+select*from Orders
+ --8.Mostrar todos clientes que compraram mais de uma unidade de um livro
+ SELECT DISTINCT c.*
+FROM Customers c
+JOIN Orders o ON c.Customer_ID = o.Customer_ID
+WHERE o.Quantity > 1;
+
+ SELECT DISTINCT
+    c.Customer_ID,
+    c.Name
+FROM
+    Customers c
+JOIN
+    Orders o ON c.Customer_ID = o.Customer_ID
+WHERE
+    o.Quantity > 1;
+
+--10 Calcular o valor médio gasto por cada cliente
+SELECT Customer_ID, AVG(Total_Amount) AS Media_Gasta
+FROM Orders
+GROUP BY Customer_ID;
+
+-- 11.Recuperar o total de livros vendidos por gênero
+SELECT b.Genre, SUM(o.Quantity) AS Total_Vendido
+FROM Orders o
+JOIN Books b ON o.Book_ID = b.Book_ID
+GROUP BY b.Genre;
+
+-- 12.Calcular o preço médio dos livros do gênero "Fantasy"
+SELECT 
+	to_char(AVG(Price),'FM999G999G999') AS Preco_Medio
+FROM Books
+WHERE Genre = 'Fantasy';
+
+-- 13.Listar os gêneros com maior receita de vendas
+SELECT b.Genre, SUM(o.Total_Amount) AS Receita
+FROM Orders o
+JOIN Books b ON o.Book_ID = b.Book_ID
+GROUP BY b.Genre
+ORDER BY Receita DESC;
+
+-- 14.Listar clientes que fizeram pelo menos 2 pedidos
+SELECT Customer_ID
+FROM Orders
+GROUP BY Customer_ID
+HAVING COUNT(Order_ID) >= 2;
+
+-- 15.Encontrar o cliente que mais gastou
+SELECT Customer_ID, SUM(Total_Amount) AS Total_Gasto
+FROM Orders
+GROUP BY Customer_ID
+ORDER BY Total_Gasto DESC
+LIMIT 1;
+
+--16. Listar clientes que fizeram pelo menos 2 pedidos
+SELECT Customer_ID
+FROM Orders
+GROUP BY Customer_ID
+HAVING COUNT(Order_ID) >= 2;
+
+-- 17.Encontrar o cliente que mais gastou
+SELECT Customer_ID, SUM(Total_Amount) AS Total_Gasto
+FROM Orders
+GROUP BY Customer_ID
+ORDER BY Total_Gasto DESC
+LIMIT 1;
+
+
+
+
